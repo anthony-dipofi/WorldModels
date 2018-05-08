@@ -4,7 +4,6 @@ from torch.autograd import Variable
 import torch.optim as optim
 import torch.nn.functional as F
 import torchvision
-import PIL
 import torchvision.transforms.functional
 import numpy as np
 import visdom
@@ -109,7 +108,7 @@ def main():
 		img_e = img_encoder(img_in)
 		e_dist = prior(img_e)
 		mu = e_dist[:,v_size:]
-		#most VAEs I have seen use exp here to ensure sigma is > 0  but doing so seems to cause the model to diverge and abs works fine
+		#most VAEs I have seen use exp here to ensure sigma is > 0  but doing so seems to cause the model to diverge and abs seems to works well ¯\_(ツ)_/¯
 		sigma = torch.abs(e_dist[:,:v_size])+0.0001#torch.exp(e_dist[:,:v_size])#torch.abs(e_dist[:,:v_size])+0.0001
 		v = mu + sigma*Variable(torch.randn(mu.shape)).cuda()
 		vo = v_out(v)

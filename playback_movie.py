@@ -4,11 +4,13 @@ import numpy as np
 import pickle
 import scipy.misc
 
-files = os.listdir("train_data")
+train_data_folder = "train_data"
+output_data_folder = "data"
+files = os.listdir(train_data_folder)
 names = "test3"
 for i in range(len(files)):
     #movie = retro.Movie('/media/anthony/linDisk/code/OpenAIRetro/openai_retro_comp_wassname-master/outputs/trajectories/bk2/20180423_13-47-41_human/SonicAndKnuckles3-Genesis-SandopolisZone.Act2-0005.bk2')
-    movie = retro.Movie("train_data/"+files[i])
+    movie = retro.Movie(train_data_folder+"/"+files[i])
     movie.step()
 
     env = retro.make(game=movie.get_game(), state=retro.STATE_NONE, use_restricted_actions=retro.ACTIONS_ALL)
@@ -37,5 +39,5 @@ for i in range(len(files)):
     rews_o = np.array(rews)
     acts_o = np.stack(acts, axis=0 )
     dat = (obss_o,rews_o,acts_o)
-    pickle.dump( dat, open( "data/data_"+names+"_"+files[i][:-4]+".pth", "wb+" ) )
+    pickle.dump( dat, open( output_data_folder+"/data_"+names+"_"+files[i][:-4]+".pth", "wb+" ) )
     env.close()
