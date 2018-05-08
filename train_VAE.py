@@ -43,10 +43,20 @@ def main():
 		rewards.append(data[1])
 		actions.append(data[2])
 
-	all_obss = torch.Tensor(np.concatenate(obss))#.cuda()
-	all_data_length = len(all_obss)
-	all_rewards = torch.Tensor(np.concatenate(rewards))#.cuda()
-	all_actions = torch.Tensor(np.concatenate(actions))#.cuda()
+	all_obs = np.concatenate(obss)
+	all_rewards = np.concatenate(rewards)
+	all_actions = np.concatenate(actions)
+	all_data_length = len(all_rewards)
+
+	shuffle = np.random.permutation(all_data_length)
+
+	all_obss = all_obs[shuffle]
+	all_rewards = all_rewards[shuffle]
+	all_actions = all_actions[shuffle]
+
+	all_obss = torch.Tensor(all_obss)#.cuda()
+	all_rewards = torch.Tensor(all_rewards)#.cuda()
+	all_actions = torch.Tensor(all_actions)#.cuda()
 	all_data_length = len(all_rewards)
 
 	test_obss = all_obss[int(0.9*all_data_length):].cuda()
